@@ -1,0 +1,31 @@
+{
+    "name": "mostafa0alii/dashboard-builder",
+    "description": "Dashboard Template Theme Generator for laravel 9 and above",
+    "type": "library",
+    "require": {
+        "yoeunes/toastr": "^2.3"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Mostafa0alii\\DashboardBuilder\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Mostafa0alii\\DashboardBuilder\\DashboardBuilderServiceProvider"
+            ]
+        },
+        "aliases": {
+            "DashboardBuilder": "Mostafa0alii\\DashboardBuilder\\Facades\\DashboardBuilder"
+        }
+    },
+    "authors": [
+        {
+            "name": "Mostafa Alii",
+            "email": "mostafa0alii@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}

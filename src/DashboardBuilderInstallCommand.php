@@ -2,6 +2,8 @@
 namespace Mostafa0alii\DashboardBuilder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Helper\ProgressBar;
+use Symfony\Component\Console\Output\ConsoleOutput;
 class DashboardBuilderInstallCommand extends Command {
     protected $signature = 'dashboard-builder:install';
     protected $description = 'Install the selected dashboard theme';
@@ -10,27 +12,31 @@ class DashboardBuilderInstallCommand extends Command {
         $defaultTheme = 'webmain';
         $selectedTheme = $this->choice('Which theme do you want to install?', $themes, $defaultTheme);
         $this->info('Installing ' . $selectedTheme . ' theme...');
+        // Initialize ProgressBar
+        $output = new ConsoleOutput();
+        $progressBar = new ProgressBar($output);
+        $progressBar->setFormat("%message%\n %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s%");
+        $progressBar->setMessage('Copying assets and views...');
+        $progressBar->start();
         // Copy app-assets if selected theme is modern-admin
         if($selectedTheme == 'modern-admin') {
             $this->info('Copying app-assets...');
             $appAssetsPath = __DIR__ . '/resources/' . $selectedTheme . '/app-assets';
             $publicPath = public_path('app-assets');
             File::copyDirectory($appAssetsPath, $publicPath);
+            $progressBar->advance();
         }
         // Copy assets
         $this->info('Copying assets...');
         $assetsPath = __DIR__ . '/resources/' . $selectedTheme . '/assets';
         $publicPath = public_path('assets');
         File::copyDirectory($assetsPath, $publicPath);
+        $progressBar->advance();
         
         // Copy views
-        if($selectedTheme == 'modern-admin') {
-            $this->copyViews($selectedTheme);
-            $this->info('Dashboard theme {modern-admin} installed successfully!');
-        } else {
-            $this->copyViews($selectedTheme);
-            $this->info('Dashboard theme {webmain} installed successfully!');
-        }
+        $this->copyViews($selectedTheme);
+        $progressBar->finish();
+        $this->info('Dashboard theme ' . ($selectedTheme == 'modern-admin' ? '{modern-admin}' : '{webmain}') . ' installed successfully!');
     }
 
     protected function copyViews($selectedTheme) {

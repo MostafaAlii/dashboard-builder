@@ -25,19 +25,20 @@ class DashboardBuilderInstallCommand extends Command {
         
         // Copy views
         if($selectedTheme == 'modern-admin') {
-            $this->info('Copying views...');
-            $viewsPath = __DIR__ . '/resources/' . $selectedTheme . '/views';
-            $viewsTargetPath = resource_path('views');
-            File::copyDirectory($viewsPath, $viewsTargetPath);
+            $this->copyViews($selectedTheme);
             $this->info('Dashboard theme {modern-admin} installed successfully!');
         } else {
-            $this->info('Copying views...');
-            $viewsPath = __DIR__ . '/resources/' . $selectedTheme . '/views';
-            $viewsTargetPath = resource_path('views/dashboard');
-            if(!File::isDirectory($viewsTargetPath))
-                File::makeDirectory($viewsTargetPath);
-            File::copyDirectory($viewsPath, $viewsTargetPath);
+            $this->copyViews($selectedTheme);
             $this->info('Dashboard theme {webmain} installed successfully!');
         }
+    }
+
+    protected function copyViews($selectedTheme) {
+        $this->info('Copying views...');
+        $viewsPath = __DIR__ . '/resources/' . $selectedTheme . '/views';
+        $viewsTargetPath = resource_path('views');
+        if(!File::isDirectory($viewsTargetPath))
+            File::makeDirectory($viewsTargetPath);
+        File::copyDirectory($viewsPath, $viewsTargetPath);
     }
 }

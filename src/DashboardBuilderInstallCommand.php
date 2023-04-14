@@ -1,5 +1,5 @@
 <?php
-namespace Mostafa0alii\DashboardBuilder\Dash;
+namespace Mostafa0alii\DashboardBuilder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
 class DashboardBuilderInstallCommand extends Command {
